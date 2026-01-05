@@ -60,6 +60,8 @@ Numpad 5: Reset camera<br>
 2: Load pyramid<br>
 3: Load icosphere<br>
 4: Load cross<br>
+D: Toggle background dots<br>
+C: Toggle camera auto-rotate<br>
 H: Toggle this help overlay<br>
 `;
 document.body.appendChild(overlayHelp);
@@ -142,6 +144,10 @@ let cameraRadius = 3;
 // Hide show help overlay
 let overlayHelpVisible = true;
 
+let backgroundDotsVisible = true;
+let cameraAutoRotate = false;
+let cameraAutoRotateSpeed = 0.005;
+
 window.addEventListener('keydown', (e: KeyboardEvent) => {
   // ...existing key handlers...
   if (e.key === 'h' || e.key === 'H') {
@@ -207,6 +213,13 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'r') restartRotation();
     if (e.key === '+') AutoRotateSpeedChange(true);
     if (e.key === '-') AutoRotateSpeedChange(false);
+    if (e.key === 'd' || e.key === 'D') {
+      backgroundDotsVisible = !backgroundDotsVisible;
+      backgroundDots.forEach(dot => dot.visible = backgroundDotsVisible);
+    }
+    if (e.key === 'c' || e.key === 'C') {
+      cameraAutoRotate = !cameraAutoRotate;
+    }
   });
 
   window.addEventListener('keyup', (e: KeyboardEvent) => {
@@ -434,6 +447,9 @@ if (cross && cross.children) {
     newPositions.map((p, idx) => `#${idx}: (${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})`).join('<br>');
 
   const center = new THREE.Vector3(0, 0, 0);
+  if (cameraAutoRotate) {
+    cameraAngleY += cameraAutoRotateSpeed;
+  }
 camera.position.x = cameraRadius * Math.sin(cameraAngleY) * Math.cos(cameraAngleX);
 camera.position.y = cameraRadius * Math.sin(cameraAngleX);
 camera.position.z = cameraRadius * Math.cos(cameraAngleY) * Math.cos(cameraAngleX);
