@@ -90,9 +90,15 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
   if (newMeshName !== meshName) {
     meshName = newMeshName;
 
-    // Remove previous meshes from scene
-    if (originalCross) scene.remove(originalCross);
-    if (cross) scene.remove(cross);
+    // Dispose and remove previous meshes from scene
+    if (originalCross) {
+      disposeMesh(originalCross);
+      scene.remove(originalCross);
+    }
+    if (cross) {
+      disposeMesh(cross);
+      scene.remove(cross);
+    }
 
     // Reload STL models
     const stlLoader = new STLLoader();
@@ -307,6 +313,22 @@ let greenWireframe: THREE.LineSegments | null = null;
 let blueWireframeVisible = true;
 let greenWireframeVisible = true;
 
+// Function to dispose a mesh and its children recursively
+function disposeMesh(mesh: THREE.Object3D) {
+  mesh.traverse((child) => {
+    if (child instanceof THREE.Mesh || child instanceof THREE.LineSegments) {
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) {
+        if (Array.isArray(child.material)) {
+          child.material.forEach(mat => mat.dispose());
+        } else {
+          child.material.dispose();
+        }
+      }
+    }
+  });
+}
+
 // Load STL model for blue cross
 const stlLoader = new STLLoader();
 stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
@@ -431,6 +453,7 @@ if (cross && cross.children) {
   for (let i = cross.children.length - 1; i >= 0; i--) {
     const child = cross.children[i];
     if (child.type === 'LineSegments') {
+      disposeMesh(child);
       cross.remove(child);
     }
   }
