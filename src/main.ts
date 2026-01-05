@@ -89,7 +89,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
 
     // Reload STL models
     const stlLoader = new STLLoader();
-    stlLoader.load(meshName, (geometry: THREE.BufferGeometry) => {
+    stlLoader.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
       stlGeometryOriginal = geometry.clone();
       const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 0.3, transparent: true });
       originalCross = new THREE.Mesh(stlGeometryOriginal, stlMaterial);
@@ -105,7 +105,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     });
 
     const stlLoader2 = new STLLoader();
-    stlLoader2.load(meshName, (geometry: THREE.BufferGeometry) => {
+    stlLoader2.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
       stlGeometryDeformed = geometry.clone();
       const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: true });
       cross = new THREE.Mesh(stlGeometryDeformed, stlMaterial);
@@ -269,7 +269,7 @@ let stlGeometryDeformed: THREE.BufferGeometry | null = null;
 
 // Load STL model for blue cross
 const stlLoader = new STLLoader();
-stlLoader.load(meshName, (geometry: THREE.BufferGeometry) => {
+stlLoader.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
   stlGeometryOriginal = geometry.clone();
   const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 0.3, transparent: true });
   originalCross = new THREE.Mesh(stlGeometryOriginal, stlMaterial);
@@ -287,7 +287,7 @@ stlLoader.load(meshName, (geometry: THREE.BufferGeometry) => {
 
 // Load STL model for green cross (deformed)
 const stlLoader2 = new STLLoader();
-stlLoader2.load(meshName, (geometry: THREE.BufferGeometry) => {
+stlLoader2.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
   stlGeometryDeformed = geometry.clone();
   const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: true });
   cross = new THREE.Mesh(stlGeometryDeformed, stlMaterial);
