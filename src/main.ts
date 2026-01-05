@@ -98,7 +98,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     const stlLoader = new STLLoader();
     stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
       stlGeometryOriginal = geometry.clone();
-      const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 0.3, transparent: true });
+      const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 1, transparent: false });
       originalCross = new THREE.Mesh(stlGeometryOriginal, stlMaterial);
       originalCross.position.set(0, 0, 0);
       originalCross.scale.set(0.5, 0.5, 0.5);
@@ -114,7 +114,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     const stlLoader2 = new STLLoader();
     stlLoader2.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
       stlGeometryDeformed = geometry.clone();
-      const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: true });
+      const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: false });
       cross = new THREE.Mesh(stlGeometryDeformed, stlMaterial);
       cross.scale.set(0.5, 0.5, 0.5);
       scene.add(cross);
@@ -304,7 +304,7 @@ let greenWireframe: THREE.LineSegments | null = null;
 const stlLoader = new STLLoader();
 stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
   stlGeometryOriginal = geometry.clone();
-  const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 0.3, transparent: true });
+  const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 1, transparent: false });
   originalCross = new THREE.Mesh(stlGeometryOriginal, stlMaterial);
   originalCross.position.set(0, 0, 0);
   originalCross.scale.set(0.5, 0.5, 0.5);
@@ -322,7 +322,7 @@ stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeome
 const stlLoader2 = new STLLoader();
 stlLoader2.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
   stlGeometryDeformed = geometry.clone();
-  const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: true });
+  const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: false });
   cross = new THREE.Mesh(stlGeometryDeformed, stlMaterial);
   //cross.position.set(-0.5, 0.1, -0.5);
   cross.scale.set(0.5, 0.5, 0.5);
