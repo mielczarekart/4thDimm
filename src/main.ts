@@ -108,6 +108,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
         new THREE.WireframeGeometry(stlGeometryOriginal),
         new THREE.LineBasicMaterial({ color: 0x0000ff })
       );
+      blueWireframe.visible = blueWireframeVisible;
       originalCross.add(blueWireframe);
     });
 
@@ -123,6 +124,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
         new THREE.WireframeGeometry(stlGeometryDeformed),
         new THREE.LineBasicMaterial({ color: 0x00ff09 })
       );
+      greenWireframe.visible = greenWireframeVisible;
       cross.add(greenWireframe);
     });
   }
@@ -220,10 +222,11 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
       if (cross) cross.visible = !cross.visible;
     }
     if (e.key === 'w' || e.key === 'W') {
-      if (blueWireframe) blueWireframe.visible = !blueWireframe.visible;
+      blueWireframeVisible = !blueWireframeVisible;
+      if (blueWireframe) blueWireframe.visible = blueWireframeVisible;
     }
     if (e.key === 'e' || e.key === 'E') {
-      if (greenWireframe) greenWireframe.visible = !greenWireframe.visible;
+      greenWireframeVisible = !greenWireframeVisible;
     }
     if (e.key === 'r') restartRotation();
     if (e.key === '+') AutoRotateSpeedChange(true);
@@ -301,6 +304,8 @@ let stlGeometryOriginal: THREE.BufferGeometry | null = null;
 let stlGeometryDeformed: THREE.BufferGeometry | null = null;
 let blueWireframe: THREE.LineSegments | null = null;
 let greenWireframe: THREE.LineSegments | null = null;
+let blueWireframeVisible = true;
+let greenWireframeVisible = true;
 
 // Load STL model for blue cross
 const stlLoader = new STLLoader();
@@ -317,6 +322,7 @@ stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeome
     new THREE.WireframeGeometry(stlGeometryOriginal),
     new THREE.LineBasicMaterial({ color: 0x0000ff })
   );
+  blueWireframe.visible = blueWireframeVisible;
   originalCross.add(blueWireframe);
 });
 
@@ -335,6 +341,7 @@ stlLoader2.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeom
     new THREE.WireframeGeometry(stlGeometryDeformed),
     new THREE.LineBasicMaterial({ color: 0x00ff09 })
   );
+  greenWireframe.visible = greenWireframeVisible;
   cross.add(greenWireframe);
 });
 
@@ -432,6 +439,7 @@ if (cross && cross.children) {
     new THREE.WireframeGeometry(stlGeometryDeformed),
     new THREE.LineBasicMaterial({ color: 0x00ff09 })
   );
+  updatedWireframe.visible = greenWireframeVisible;
   cross.add(updatedWireframe);
 }
   // Move green cross to a new position (example: shift right by 1 unit)
