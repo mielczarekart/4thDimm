@@ -51,6 +51,8 @@ Shift + Mouse drag: Roll blue object<br>
 A: Toggle auto-rotate<br>
 T: Toggle blue object visibility<br>
 Y: Toggle green object visibility<br>
+B: Toggle blue wireframe<br>
+G: Toggle green wireframe<br>
 R: Reset blue object rotation & auto-rotate speed<br>
 + / - : Change auto-rotate speed<br>
 Numpad 4/6: Rotate camera yaw left/right<br>
@@ -102,11 +104,11 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
       originalCross.scale.set(0.5, 0.5, 0.5);
       scene.add(originalCross);
 
-      const stlWireframe = new THREE.LineSegments(
+      blueWireframe = new THREE.LineSegments(
         new THREE.WireframeGeometry(stlGeometryOriginal),
         new THREE.LineBasicMaterial({ color: 0x0000ff })
       );
-      originalCross.add(stlWireframe);
+      originalCross.add(blueWireframe);
     });
 
     const stlLoader2 = new STLLoader();
@@ -117,11 +119,11 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
       cross.scale.set(0.5, 0.5, 0.5);
       scene.add(cross);
 
-      const stlWireframe = new THREE.LineSegments(
+      greenWireframe = new THREE.LineSegments(
         new THREE.WireframeGeometry(stlGeometryDeformed),
         new THREE.LineBasicMaterial({ color: 0x00ff09 })
       );
-      cross.add(stlWireframe);
+      cross.add(greenWireframe);
     });
   }
 });
@@ -215,6 +217,12 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'y') {
       if (cross) cross.visible = !cross.visible;
     }
+    if (e.key === 'b' || e.key === 'B') {
+      if (blueWireframe) blueWireframe.visible = !blueWireframe.visible;
+    }
+    if (e.key === 'g' || e.key === 'G') {
+      if (greenWireframe) greenWireframe.visible = !greenWireframe.visible;
+    }
     if (e.key === 'r') restartRotation();
     if (e.key === '+') AutoRotateSpeedChange(true);
     if (e.key === '-') AutoRotateSpeedChange(false);
@@ -289,6 +297,8 @@ let originalCross: THREE.Mesh | null = null;
 let cross: THREE.Mesh | null = null;
 let stlGeometryOriginal: THREE.BufferGeometry | null = null;
 let stlGeometryDeformed: THREE.BufferGeometry | null = null;
+let blueWireframe: THREE.LineSegments | null = null;
+let greenWireframe: THREE.LineSegments | null = null;
 
 // Load STL model for blue cross
 const stlLoader = new STLLoader();
@@ -301,11 +311,11 @@ stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeome
   scene.add(originalCross);
 
   // Add wireframe overlay to blue STL mesh
-  const stlWireframe = new THREE.LineSegments(
+  blueWireframe = new THREE.LineSegments(
     new THREE.WireframeGeometry(stlGeometryOriginal),
     new THREE.LineBasicMaterial({ color: 0x0000ff })
   );
-  originalCross.add(stlWireframe);
+  originalCross.add(blueWireframe);
 });
 
 // Load STL model for green cross (deformed)
@@ -319,11 +329,11 @@ stlLoader2.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeom
   scene.add(cross);
 
   // Add wireframe overlay to green STL mesh
-  const stlWireframe = new THREE.LineSegments(
+  greenWireframe = new THREE.LineSegments(
     new THREE.WireframeGeometry(stlGeometryDeformed),
     new THREE.LineBasicMaterial({ color: 0x00ff09 })
   );
-  cross.add(stlWireframe);
+  cross.add(greenWireframe);
 });
 
 function toogleBlueCross() {
