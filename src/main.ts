@@ -49,10 +49,10 @@ overlayHelp.innerHTML = `
 Mouse drag: Rotate blue object<br>
 Shift + Mouse drag: Roll blue object<br>
 A: Toggle auto-rotate<br>
-T: Toggle blue object visibility<br>
-Y: Toggle green object visibility<br>
-B: Toggle blue wireframe<br>
-G: Toggle green wireframe<br>
+B: Toggle blue object visibility<br>
+G: Toggle green object visibility<br>
+W: Toggle blue wireframe<br>
+E: Toggle green wireframe<br>
 R: Reset blue object rotation & auto-rotate speed<br>
 + / - : Change auto-rotate speed<br>
 Numpad 4/6: Rotate camera yaw left/right<br>
@@ -213,14 +213,16 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
   window.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Shift') isShift = true;
     if (e.key === 'a') isAutoRotate = !isAutoRotate;
-    if (e.key === 't') toogleBlueCross();
-    if (e.key === 'y') {
-      if (cross) cross.visible = !cross.visible;
-    }
     if (e.key === 'b' || e.key === 'B') {
-      if (blueWireframe) blueWireframe.visible = !blueWireframe.visible;
+      if (originalCross) originalCross.visible = !originalCross.visible;
     }
     if (e.key === 'g' || e.key === 'G') {
+      if (cross) cross.visible = !cross.visible;
+    }
+    if (e.key === 'w' || e.key === 'W') {
+      if (blueWireframe) blueWireframe.visible = !blueWireframe.visible;
+    }
+    if (e.key === 'e' || e.key === 'E') {
       if (greenWireframe) greenWireframe.visible = !greenWireframe.visible;
     }
     if (e.key === 'r') restartRotation();
@@ -335,10 +337,6 @@ stlLoader2.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeom
   );
   cross.add(greenWireframe);
 });
-
-function toogleBlueCross() {
-  if (originalCross) originalCross.visible = !originalCross.visible;
-}
 
 function restartRotation() {
   if (originalCross) originalCross.rotation.set(0, 0, 0);
