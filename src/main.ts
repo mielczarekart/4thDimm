@@ -377,8 +377,8 @@ function animate() {
   }
 
   // Calculate screen positions of blue cross vertices after rotation
-  const offsetX = renderer.domElement.width / 10;
-  const offsetY = renderer.domElement.height / 10;
+  const offsetX = renderer.domElement.width / 2;
+  const offsetY = renderer.domElement.height / 2;
   const offsetZ = 0;
   const screenPositionsBlue: { x: number, y: number }[] = [];
   for (let i = 0; i < originalPositions.length; i++) {
