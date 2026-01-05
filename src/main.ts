@@ -4,6 +4,8 @@ import * as THREE from 'three';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (app) {
+  document.body.style.backgroundColor = 'black'; // Change page background color here
+
   // Overlays
   const overlayScreen = document.createElement('div');
   overlayScreen.style.position = 'absolute';
