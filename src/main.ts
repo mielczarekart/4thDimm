@@ -408,24 +408,19 @@ function animate() {
   }
   positionGreen.needsUpdate = true;
 
-  // --- FIX: Rebuild green wireframe to match deformed mesh ---
-if (cross && cross.children) {
-  // Remove previous wireframe if present
-  for (let i = cross.children.length - 1; i >= 0; i--) {
-    const child = cross.children[i];
-    if (child.type === 'LineSegments') {
-      cross.remove(child);
-    }
+  // Calculate average position to center the deformed object
+  let avgX = 0, avgY = 0, avgZ = 0;
+  for (let pos of newPositions) {
+    avgX += pos.x;
+    avgY += pos.y;
+    avgZ += pos.z;
   }
-  // Add updated wireframe
-  const updatedWireframe = new THREE.LineSegments(
-    new THREE.WireframeGeometry(stlGeometryDeformed),
-    new THREE.LineBasicMaterial({ color: 0x00ff09 })
-  );
-  cross.add(updatedWireframe);
-}
-  // Move green cross to a new position (example: shift right by 1 unit)
-  cross.position.set(-0.5, -0.5, -1.5);
+  avgX /= newPositions.length;
+  avgY /= newPositions.length;
+  avgZ /= newPositions.length;
+
+  // Move green cross to center the deformed object
+  cross.position.set(-avgX, -avgY, -avgZ);
 
   // Project 3D vertex positions to 2D screen coordinates
   let screenPositions: { x: number, y: number }[] = [];
