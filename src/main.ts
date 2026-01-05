@@ -50,9 +50,9 @@ Mouse drag: Rotate blue object<br>
 Shift + Mouse drag: Roll blue object<br>
 A: Toggle auto-rotate<br>
 B: Toggle blue object visibility<br>
-G: Toggle green object visibility<br>
+Y: Toggle green object visibility<br>
 W: Toggle blue wireframe<br>
-E: Toggle green wireframe<br>
+G: Toggle green wireframe<br>
 R: Reset blue object rotation & auto-rotate speed<br>
 + / - : Change auto-rotate speed<br>
 Numpad 4/6: Rotate camera yaw left/right<br>
@@ -218,14 +218,14 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'b' || e.key === 'B') {
       if (originalCross) originalCross.visible = !originalCross.visible;
     }
-    if (e.key === 'g' || e.key === 'G') {
+    if (e.key === 'y' || e.key === 'Y') {
       if (cross) cross.visible = !cross.visible;
     }
     if (e.key === 'w' || e.key === 'W') {
       blueWireframeVisible = !blueWireframeVisible;
       if (blueWireframe) blueWireframe.visible = blueWireframeVisible;
     }
-    if (e.key === 'e' || e.key === 'E') {
+    if (e.key === 'g' || e.key === 'G') {
       greenWireframeVisible = !greenWireframeVisible;
     }
     if (e.key === 'r') restartRotation();
