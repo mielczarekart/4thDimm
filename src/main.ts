@@ -62,7 +62,6 @@ Numpad 5: Reset camera<br>
 4: Load cross<br>
 D: Toggle background dots<br>
 C: Toggle camera auto-rotate<br>
-O: Toggle coordinates overlay<br>
 H: Toggle this help overlay<br>
 `;
 document.body.appendChild(overlayHelp);
@@ -145,8 +144,6 @@ let cameraRadius = 3;
 // Hide show help overlay
 let overlayHelpVisible = true;
 
-let coordinatesVisible = true;
-
 let backgroundDotsVisible = true;
 let cameraAutoRotate = false;
 let cameraAutoRotateSpeed = 0.005;
@@ -223,11 +220,6 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'c' || e.key === 'C') {
       cameraAutoRotate = !cameraAutoRotate;
     }
-    if (e.key === 'o' || e.key === 'O') {
-      coordinatesVisible = !coordinatesVisible;
-      overlayScreen.style.display = coordinatesVisible ? 'block' : 'none';
-      overlay3d.style.display = coordinatesVisible ? 'block' : 'none';
-    }
   });
 
   window.addEventListener('keyup', (e: KeyboardEvent) => {
@@ -248,7 +240,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
   const scene = new THREE.Scene();
 
   // Camera
-  const camera = new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
   camera.position.z = 3;
 
   // Lighting
@@ -377,8 +369,8 @@ function animate() {
   }
 
   // Calculate screen positions of blue cross vertices after rotation
-  const offsetX = renderer.domElement.width / 2;
-  const offsetY = renderer.domElement.height / 2;
+  const offsetX = renderer.domElement.width / 10;
+  const offsetY = renderer.domElement.height / 10;
   const offsetZ = 0;
   const screenPositionsBlue: { x: number, y: number }[] = [];
   for (let i = 0; i < originalPositions.length; i++) {
@@ -408,19 +400,24 @@ function animate() {
   }
   positionGreen.needsUpdate = true;
 
-  // Calculate average position to center the deformed object
-  let avgX = 0, avgY = 0, avgZ = 0;
-  for (let pos of newPositions) {
-    avgX += pos.x;
-    avgY += pos.y;
-    avgZ += pos.z;
+  // --- FIX: Rebuild green wireframe to match deformed mesh ---
+if (cross && cross.children) {
+  // Remove previous wireframe if present
+  for (let i = cross.children.length - 1; i >= 0; i--) {
+    const child = cross.children[i];
+    if (child.type === 'LineSegments') {
+      cross.remove(child);
+    }
   }
-  avgX /= newPositions.length;
-  avgY /= newPositions.length;
-  avgZ /= newPositions.length;
-
-  // Move green cross to center the deformed object
-  cross.position.set(-avgX, -avgY, -avgZ);
+  // Add updated wireframe
+  const updatedWireframe = new THREE.LineSegments(
+    new THREE.WireframeGeometry(stlGeometryDeformed),
+    new THREE.LineBasicMaterial({ color: 0x00ff09 })
+  );
+  cross.add(updatedWireframe);
+}
+  // Move green cross to a new position (example: shift right by 1 unit)
+  cross.position.set(-0.5, -0.5, -1.5);
 
   // Project 3D vertex positions to 2D screen coordinates
   let screenPositions: { x: number, y: number }[] = [];
