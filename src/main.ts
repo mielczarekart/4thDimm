@@ -62,6 +62,7 @@ Numpad 5: Reset camera<br>
 4: Load cross<br>
 D: Toggle background dots<br>
 C: Toggle camera auto-rotate<br>
+O: Toggle coordinates overlay<br>
 H: Toggle this help overlay<br>
 `;
 document.body.appendChild(overlayHelp);
@@ -144,6 +145,8 @@ let cameraRadius = 3;
 // Hide show help overlay
 let overlayHelpVisible = true;
 
+let coordinatesVisible = true;
+
 let backgroundDotsVisible = true;
 let cameraAutoRotate = false;
 let cameraAutoRotateSpeed = 0.005;
@@ -219,6 +222,11 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     }
     if (e.key === 'c' || e.key === 'C') {
       cameraAutoRotate = !cameraAutoRotate;
+    }
+    if (e.key === 'o' || e.key === 'O') {
+      coordinatesVisible = !coordinatesVisible;
+      overlayScreen.style.display = coordinatesVisible ? 'block' : 'none';
+      overlay3d.style.display = coordinatesVisible ? 'block' : 'none';
     }
   });
 
