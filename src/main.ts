@@ -4,6 +4,12 @@ import * as THREE from 'three';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (app) {
+  // Set full screen
+  document.body.style.margin = '0';
+  document.body.style.overflow = 'hidden';
+  app.style.width = '100vw';
+  app.style.height = '100vh';
+
   // Overlays
   const overlayScreen = document.createElement('div');
   overlayScreen.style.position = 'absolute';
@@ -62,14 +68,18 @@ Numpad 5: Reset camera<br>
 4: Load cross<br>
 D: Toggle background dots<br>
 C: Toggle camera auto-rotate<br>
+O: Toggle coordinates overlay<br>
 H: Toggle this help overlay<br>
 `;
 document.body.appendChild(overlayHelp);
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(800, 600);
+  renderer.setSize(window.innerWidth, window.innerHeight);
   app.appendChild(renderer.domElement);
+  renderer.domElement.style.position = 'absolute';
+  renderer.domElement.style.top = '0';
+  renderer.domElement.style.left = '0';
   
   
   let meshName = 'cross.stl';
@@ -91,7 +101,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
 
     // Reload STL models
     const stlLoader = new STLLoader();
-    stlLoader.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
+    stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
       stlGeometryOriginal = geometry.clone();
       const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 0.3, transparent: true });
       originalCross = new THREE.Mesh(stlGeometryOriginal, stlMaterial);
@@ -107,7 +117,7 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     });
 
     const stlLoader2 = new STLLoader();
-    stlLoader2.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
+    stlLoader2.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
       stlGeometryDeformed = geometry.clone();
       const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: true });
       cross = new THREE.Mesh(stlGeometryDeformed, stlMaterial);
@@ -143,6 +153,8 @@ let cameraRadius = 3;
 
 // Hide show help overlay
 let overlayHelpVisible = true;
+
+let coordinatesVisible = true;
 
 let backgroundDotsVisible = true;
 let cameraAutoRotate = false;
@@ -220,6 +232,11 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'c' || e.key === 'C') {
       cameraAutoRotate = !cameraAutoRotate;
     }
+    if (e.key === 'o' || e.key === 'O') {
+      coordinatesVisible = !coordinatesVisible;
+      overlayScreen.style.display = coordinatesVisible ? 'block' : 'none';
+      overlay3d.style.display = coordinatesVisible ? 'block' : 'none';
+    }
   });
 
   window.addEventListener('keyup', (e: KeyboardEvent) => {
@@ -240,8 +257,15 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
   const scene = new THREE.Scene();
 
   // Camera
-  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 3;
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
 
   // Lighting
   const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
@@ -282,7 +306,7 @@ let stlGeometryDeformed: THREE.BufferGeometry | null = null;
 
 // Load STL model for blue cross
 const stlLoader = new STLLoader();
-stlLoader.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
+stlLoader.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
   stlGeometryOriginal = geometry.clone();
   const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, wireframe: false, opacity: 0.3, transparent: true });
   originalCross = new THREE.Mesh(stlGeometryOriginal, stlMaterial);
@@ -300,7 +324,7 @@ stlLoader.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
 
 // Load STL model for green cross (deformed)
 const stlLoader2 = new STLLoader();
-stlLoader2.load('/' + meshName, (geometry: THREE.BufferGeometry) => {
+stlLoader2.load(import.meta.env.BASE_URL + meshName, (geometry: THREE.BufferGeometry) => {
   stlGeometryDeformed = geometry.clone();
   const stlMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff09, wireframe: false, opacity: 1, transparent: true });
   cross = new THREE.Mesh(stlGeometryDeformed, stlMaterial);
