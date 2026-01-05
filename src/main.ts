@@ -4,12 +4,6 @@ import * as THREE from 'three';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (app) {
-  // Set full screen
-  document.body.style.margin = '0';
-  document.body.style.overflow = 'hidden';
-  app.style.width = '100vw';
-  app.style.height = '100vh';
-
   // Overlays
   const overlayScreen = document.createElement('div');
   overlayScreen.style.position = 'absolute';
@@ -75,11 +69,8 @@ document.body.appendChild(overlayHelp);
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(800, 600);
   app.appendChild(renderer.domElement);
-  renderer.domElement.style.position = 'absolute';
-  renderer.domElement.style.top = '0';
-  renderer.domElement.style.left = '0';
   
   
   let meshName = 'cross.stl';
@@ -257,15 +248,8 @@ window.addEventListener('keydown', (e: KeyboardEvent) => {
   const scene = new THREE.Scene();
 
   // Camera
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000);
   camera.position.z = 3;
-
-  // Handle window resize
-  window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-  });
 
   // Lighting
   const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
