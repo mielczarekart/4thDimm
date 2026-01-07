@@ -410,10 +410,10 @@ function animate() {
   const gamepads = navigator.getGamepads();
   if (gamepads[0] && originalCross) {
     const gp = gamepads[0];
-    const axis4 = gp.axes[4] || 0; // Right stick X
-    const axis5 = gp.axes[5] || 0; // Right stick Y
-    originalCross.rotation.x += axis4 * 0.05; // Rotate around X based on axis 4
-    originalCross.rotation.y += axis5 * 0.05; // Rotate around Y based on axis 5
+    const axisX = gp.axes[3] || 0; // Right stick X
+    const axisY = gp.axes[2] || 0; // Right stick Y
+    originalCross.rotation.x += axisX * 0.05; // Rotate around X based on axis X
+    originalCross.rotation.y += axisY * 0.05; // Rotate around Y based on axis Y
   }
 
   // Get positions from blue STL mesh
