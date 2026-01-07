@@ -68,6 +68,8 @@ D: Toggle background dots<br>
 C: Toggle camera auto-rotate<br>
 O: Toggle coordinates overlay<br>
 H: Toggle this help overlay<br>
+Joystick axis 4: Rotate blue object X<br>
+Joystick axis 5: Rotate blue object Y<br>
 `;
 document.body.appendChild(overlayHelp);
 
@@ -402,6 +404,16 @@ function animate() {
     originalCross.rotation.x += autoRotateSpeedX;
     originalCross.rotation.y += autoRotateSpeedY;
     originalCross.rotation.z += autoRotateSpeedZ;
+  }
+
+  // Handle joystick input for the blue object
+  const gamepads = navigator.getGamepads();
+  if (gamepads[0] && originalCross) {
+    const gp = gamepads[0];
+    const axis4 = gp.axes[4] || 0; // Right stick X
+    const axis5 = gp.axes[5] || 0; // Right stick Y
+    originalCross.rotation.x += axis4 * 0.05; // Rotate around X based on axis 4
+    originalCross.rotation.y += axis5 * 0.05; // Rotate around Y based on axis 5
   }
 
   // Get positions from blue STL mesh
